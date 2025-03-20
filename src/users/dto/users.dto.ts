@@ -8,8 +8,8 @@ export class UserDTO {
 }
 
 export enum RolesEnum{
-    ADMIN = 'admin',
-    USER = 'user'
+    ADMIN = 'ADMIN',
+    USER = 'USER'
 }
 
 export interface IUserData {
