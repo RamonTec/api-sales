@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { DbModule } from './db/db.module';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule as Config} from './config/config.module';
 import { Encrypt } from './utils/encrypt.util';
+import { CategoriesModule } from './categories/categories.module';
+
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { Encrypt } from './utils/encrypt.util';
     UsersModule,
     AuthModule,
     Config,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService,Encrypt],
