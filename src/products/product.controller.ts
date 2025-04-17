@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthRoles } from 'src/auth/auth.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { _CreateProductDtoClass, _UpdateProductDtoClass } from './dto/product.dto';
+import { _CreateProductDtoClass, _FilterProductDtoClass, _UpdateProductDtoClass } from './dto/product.dto';
 import { ProductService } from './product.service';
 import { ApiBadRequestResponse, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RolesEnum } from 'src/users/dto/users.dto';
@@ -53,6 +53,26 @@ export class ProductController {
       description: 'Invalid data',
   })
   async update(@Body() oldProduct: _UpdateProductDtoClass){
+    return await this.productService.updateProduct(oldProduct);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('products')
+  @ApiOperation({
+      summary: 'list products'
+  })
+  @ApiBody({
+      type: _FilterProductDtoClass
+  })
+  @ApiResponse({
+      description: 'list products success',
+      status: 200,
+      type: _FilterProductDtoClass,
+  })
+  @ApiBadRequestResponse({
+      description: 'Invalid data',
+  })
+  async listProducts(@Body() oldProduct: _UpdateProductDtoClass){
     return await this.productService.updateProduct(oldProduct);
   }
 }

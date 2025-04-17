@@ -79,3 +79,59 @@ export class _UpdateProductDtoClass extends _CreateProductDtoClass {
   })
   _id: string;
 }
+
+export class _FilterProductDtoClass {
+  @IsString()
+  @ApiProperty({
+    required: false,
+    example: 'Product name',
+    description: "Filter by product name",
+    type: String
+  })
+  name?: string;
+
+  @IsString()
+  @ApiProperty({
+    required: false,
+    example: 'Description test',
+    description: "Filter by product description",
+    type: String
+  })
+  description?: string;
+
+  @IsString()
+  @ApiProperty({
+    required: false,
+    example: 'categorie id',
+    description: "Filter by category ID",
+    type: String
+  })
+  categorieId?: string;
+
+  @IsBoolean()
+  @ApiProperty({
+    required: false,
+    example: true,
+    description: "Filter by product status",
+    type: Boolean
+  })
+  status?: boolean;
+
+  @IsNumber()
+  @ApiProperty({
+    required: false,
+    example: 10,
+    description: "Filter by minimum stock",
+    type: Number
+  })
+  minStock?: number;
+
+  @IsNumber()
+  @ApiProperty({
+    required: false,
+    example: 100,
+    description: "Filter by maximum stock",
+    type: Number
+  })
+  maxStock?: number;
+}

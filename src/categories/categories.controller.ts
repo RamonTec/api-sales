@@ -17,7 +17,7 @@ export class CategoriesController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Post('create')
+    @Post('categories')
     @UseInterceptors(FileInterceptor('file'))
     @ApiOperation({
         summary: 'Register new categorie'
@@ -39,7 +39,7 @@ export class CategoriesController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Put('update')
+    @Put('categories/:_id')
     @ApiOperation({
         summary: 'Update categorie'
     })
@@ -60,7 +60,7 @@ export class CategoriesController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('categorie-detail/:_id')
+    @Get('categories/:_id')
     @ApiOperation({
         summary: 'Get categorie'
     })

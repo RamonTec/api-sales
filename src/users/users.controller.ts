@@ -16,7 +16,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('get-moderators')
+    @Get('moderators')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'List Moderadors Success',
@@ -40,7 +40,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('get-moderator/:userId')
+    @Get('moderators/:userId')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'moderador info success',
@@ -58,7 +58,7 @@ export class UsersController {
     
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Put('update-moderator')
+    @Put('moderators/:userId')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'moderador info success',
@@ -76,7 +76,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Post('add-moderator')
+    @Post('moderators')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'moderador info success',

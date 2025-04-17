@@ -12,7 +12,7 @@ export class AuthController {
         private readonly authService: AuthService
     ){}
 
-    @Post('signin')
+    @Post('sign-in')
     @ApiOperation({
         summary: 'Login user'
     })
@@ -36,7 +36,7 @@ export class AuthController {
         response.send(res)
     }
     
-    @Post('signup')
+    @Post('sign-up')
     @ApiOperation({
         summary: 'Register user'
     })
@@ -57,6 +57,7 @@ export class AuthController {
         response.send(res)
     }
 
+    @Get('verify-token')
     @UseGuards(AuthGuard)
     @ApiOperation({
         summary: 'verify user token'
@@ -68,7 +69,6 @@ export class AuthController {
         type: String,
         description: 'ID del usuario a verificar'
     })
-    @Get('verify-token')
     async verifyToken(@Query('userId') userId: string, @Headers('authorization') bearer: string){
         const [type, token] = bearer?.split(' ') ?? [];
         const res = await this.authService.verifyToken(userId, token)
