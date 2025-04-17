@@ -1,12 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty, IsBoolean } from "class-validator";
+import { IsString, IsNotEmpty, IsBoolean, IsOptional, IsNumber, IsInt } from "class-validator";
 
 
-export interface IntCategorie {
-  id: string;
+export class IntCategorie {
+  _id: string;
   name: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   status: boolean;
 }
 
@@ -32,14 +32,14 @@ export class _CreateCategorieDtoClass {
   })
   name: string;
 
-  @IsBoolean()
   @ApiProperty({
     required: false,
-    example: 'Status',
-    description: "Status for categorie",
+    example: 'Cateogry image',
+    description: "Image for categorie",
     type: String
   })
-  status: boolean;
+  file: string;
+
 }
 
 export class _UpdateCategorieDtoClass {
@@ -61,14 +61,30 @@ export class _UpdateCategorieDtoClass {
     description: "id for categorie",
     type: String
   })
-  id: string;
+  _id: string;
 
   @IsBoolean()
   @ApiProperty({
     required: false,
     example: 'Status',
     description: "Status for categorie",
-    type: String
+    type: Boolean
   })
   status: boolean;
+}
+
+export class PaginationDto {
+  @IsOptional()
+  limit: number;
+
+  @IsOptional()
+  page: number;
+}
+
+export class IntPagination<T> {
+  data: T[];
+  limit: number;
+  total: number;
+  page: number;
+  totalPages: number
 }

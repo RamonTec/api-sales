@@ -12,13 +12,16 @@ export class Categorie {
   name: string;
 
   @Prop({ type: Boolean, required: false })
-  status: string;
+  status: boolean;
 
   @Prop({ type: Date, default: Date.now() })
   createdAt: Date;
 
   @Prop({ type: Date })
   updatedAt: Date;
+
+  @Prop({ type: String, required: true })
+  file: string;
 }
 
 export const CategorieSchema = SchemaFactory.createForClass(Categorie);

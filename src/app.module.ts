@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule as Config} from './config/config.module';
 import { Encrypt } from './utils/encrypt.util';
 import { CategoriesModule } from './categories/categories.module';
+import { ProductModule } from './products/product.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { CategoriesModule } from './categories/categories.module';
     AuthModule,
     Config,
     CategoriesModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService,Encrypt],

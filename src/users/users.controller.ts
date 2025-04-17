@@ -4,8 +4,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateModeratorDto, RolesEnum, UserDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { Response } from 'express';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { SingIn, AuthDTO } from 'src/auth/dto/auth.dto';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @Controller('users')
 @ApiTags('users flow')

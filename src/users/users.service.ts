@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { User } from './schemas/users.schemas';
 import { UserDocument } from './schemas/users.schemas';
 import { CreateModeratorDto, ResponseData, RolesEnum, UserDTO } from './dto/users.dto';
-import { SignUp } from 'src/auth/dto/auth.dto';
 import { Encrypt } from 'src/utils/encrypt.util';
 import { AuthService } from 'src/auth/auth.service';
 

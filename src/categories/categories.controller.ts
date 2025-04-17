@@ -1,14 +1,15 @@
-import { Body, Controller, Get, Headers, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
-import { CreateCategorieDto, IntCategorie, ResponseData, UpdateCategorieDto, _CreateCategorieDtoClass, _UpdateCategorieDtoClass } from './dto/categories.dto';
+import { Body, Controller, Get, Headers, Param, Post, Put, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { IntCategorie, IntPagination, PaginationDto, _CreateCategorieDtoClass, _UpdateCategorieDtoClass } from './dto/categories.dto';
 import { CategorieService } from './categories.service';
 import { Response } from 'express';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiResponse, ApiOperation, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthRoles } from 'src/auth/auth.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesEnum } from 'src/users/dto/users.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('categories')
-@ApiTags('authentication')
+@ApiTags('categories flow')
 export class CategoriesController {
     constructor(
         private readonly categorieService: CategorieService
@@ -17,6 +18,7 @@ export class CategoriesController {
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
     @Post('create')
+    @UseInterceptors(FileInterceptor('file'))
     @ApiOperation({
         summary: 'Register new categorie'
     })
@@ -31,10 +33,8 @@ export class CategoriesController {
     @ApiBadRequestResponse({
         description: 'Invalid data',
     })
-    async registerCategorie(@Body() newCategorie: _CreateCategorieDtoClass, @Res() response:Response){
-        const res = await this.categorieService.createCategorie(newCategorie)
-        response.status(res.status || 201)
-        response.send(res)
+    async registerCategorie(@UploadedFile() file: Express.Multer.File, @Body() newCategorie: _CreateCategorieDtoClass){
+        return await this.categorieService.createCategorie(newCategorie, file);
     }
 
     @UseGuards(AuthGuard)
@@ -54,29 +54,47 @@ export class CategoriesController {
     @ApiBadRequestResponse({
         description: 'Invalid data',
     })
-    async updateCategorie(@Body() oldCategorie: _UpdateCategorieDtoClass, @Res() response:Response){
-        const res = await this.categorieService.updateCategorie(oldCategorie)
-        response.status(res.status || 201)
-        response.send(res)
+    async updateCategorie(@Body() oldCategorie: _UpdateCategorieDtoClass){
+        return await this.categorieService.updateCategorie(oldCategorie);
     }
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('categorie-detail/:id')
+    @Get('categorie-detail/:_id')
     @ApiOperation({
         summary: 'Get categorie'
     })
     @ApiResponse({
         description: 'Get categorie detail',
         status: 200,
+        type: IntCategorie
     })
     @ApiBadRequestResponse({
         description: 'Invalid data',
     })
-    async getOneCategorie(@Param('id') id: string, @Res() response:Response){
-        const res = await this.categorieService.getCategorie(id)
-        response.status(res.status || 201)
-        response.send(res)
+    async getOneCategorie(@Param('_id') _id: string){
+        return await this.categorieService.getCategorie(_id);
     }
 
+    @Get('categories')
+    @ApiOperation({
+        summary: 'Get categories list',
+    })
+    @ApiBody({
+        description: 'Get all categories',
+        type: IntPagination<IntCategorie>,
+    })
+    @ApiResponse({
+        description: 'Get all categories',
+        status: 200,
+        type: IntPagination<IntCategorie>,
+    })
+    @ApiBadRequestResponse({
+        description: 'Invalid data',
+    })
+    async getCategories(
+        @Query() paginationDto: PaginationDto,
+    ){
+        return await this.categorieService.getCategoriesByPaginate(paginationDto)
+    }
 }
