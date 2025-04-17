@@ -25,8 +25,6 @@ export class Encrypt{
   }
 
   compare(ciphertext: string, password: string): boolean {
-    console.log(password);
-    console.log(ciphertext);
     const encyptation = {
         secret: process.env.ENCRYPTATION_SECRET,
         delimiter: process.env.ENCRYPTATION_DELIMITER

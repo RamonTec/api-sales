@@ -7,6 +7,10 @@ export class ConfigService {
       return Number(process.env.PORT);
     }
 
+    get dbUrl(): string {
+        return process.env.DB_URL;
+      }
+
     get jwtSecret(): string {
         return process.env.JWT_SECRET
     }
