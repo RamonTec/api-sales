@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Headers, Param, Post, Put, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { IntCategorie, IntPagination, PaginationDto, _CreateCategorieDtoClass, _UpdateCategorieDtoClass } from './dto/categories.dto';
 import { CategorieService } from './categories.service';
-import { ApiBadRequestResponse, ApiBody, ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiResponse, ApiOperation, ApiTags, ApiConsumes } from '@nestjs/swagger';
 import { AuthRoles } from 'src/auth/auth.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesEnum } from 'src/users/dto/users.dto';
@@ -16,17 +16,19 @@ export class CategoriesController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Post('categories')
+    @Post('')
     @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
     @ApiOperation({
         summary: 'Register new categorie'
     })
     @ApiBody({
+        description: 'Category data with file upload',
         type: _CreateCategorieDtoClass
     })
     @ApiResponse({
         description: 'Register new categorie success',
-        status: 200,
+        status: 201,
         type: _CreateCategorieDtoClass,
     })
     @ApiBadRequestResponse({
@@ -59,7 +61,7 @@ export class CategoriesController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('categories/:_id')
+    @Get(':_id')
     @ApiOperation({
         summary: 'Get categorie'
     })
