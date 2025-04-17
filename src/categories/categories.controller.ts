@@ -75,7 +75,7 @@ export class CategoriesController {
         return await this.categorieService.getCategorie(_id);
     }
 
-    @Get('categories')
+    @Get('')
     @ApiOperation({
         summary: 'Get categories list',
     })
