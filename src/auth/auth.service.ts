@@ -6,6 +6,7 @@ import { UserDocument, User } from 'src/users/schemas/users.schemas';
 import { AuthDTO, SignUp, SingIn } from './dto/auth.dto';
 import { Encrypt } from 'src/utils/encrypt.util';
 import { ConfigService } from 'src/config/config.service';
+import { IUserCreated, UserPayloadType } from './auth.decorator';
 
 @Injectable()
 export class AuthService {
@@ -16,43 +17,35 @@ export class AuthService {
         private readonly config: ConfigService
     ){}
 
-    async signIn(singIn: SingIn): Promise<AuthDTO | any> {
+    async signIn(signIn: SingIn): Promise<AuthDTO> {
         try {
-            const _user= await this.userModel.findOne({email: singIn.email});
+            const _user = await this.userModel.findOne({ email: signIn.email });
+            if (!_user) throw new BadRequestException('User not found');
+            
+            const isValidPassword = this.encryptUtil.compare(_user.password, signIn.password)
+            if (!isValidPassword) throw new UnauthorizedException('Invalid password');
 
-            if(!_user) throw new BadRequestException
-            const isValidPassword = this.encryptUtil.compare(_user.password, singIn.password)
-            if(!isValidPassword) throw new UnauthorizedException()
-            const userPayload = await this.generatePayload(_user)
-            const authToken = await this.jwtService.signAsync(userPayload,{
+            const userPayload = await this.generatePayload(_user);
+            const authToken = await this.jwtService.signAsync(userPayload, {
                 secret: this.config.jwtSecret,
-                expiresIn: '24h'
-            })
-
-            return {
-                user: userPayload,
-                token: authToken
-            }
-        } catch (error) {
-            console.error(error);
-            throw new HttpException({
-                status: HttpStatus.NOT_FOUND,
-                error: 'Email or password worng'
-            }, HttpStatus.NOT_FOUND, {
-                cause: error
+                expiresIn: '24h',
             });
-            return error
+            
+            return { user: userPayload, token: authToken };
+
+        } catch (error) {
+            throw error;
         }
     }
 
-    async signUp(singUp: SignUp):Promise<any>{
+    async signUp(singUp: SignUp):Promise<IUserCreated>{
         try {
             singUp.password = this.encryptUtil.hash(singUp.password)
             const user = {
                 ...singUp,
             }
             const saveUser = await this.userModel.create(user).catch(e =>{
-                throw new ConflictException()
+                throw new ConflictException('This user already exists')
             })
             const userPayload= await this.generatePayload(saveUser)
             return {
@@ -63,13 +56,13 @@ export class AuthService {
         }
     }
 
-    async generatePayload(_user){
+    async generatePayload(_user): Promise<UserPayloadType> {
         return {
             id: _user._id.toString(),
             fullName: `${_user.name} ${_user.lastName}`,
             email: _user.email,
             role: _user.role
-         }
+        }
     }
 
     async verifyToken(userId: string, token: string): Promise<any> {

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/users.schemas';
 import { UserDocument } from './schemas/users.schemas';
-import { CreateModeratorDto, ResponseData, RolesEnum, UserDTO } from './dto/users.dto';
+import { CreateUserDto, ResponseData, RolesEnum, UserDTO } from './dto/users.dto';
 import { Encrypt } from 'src/utils/encrypt.util';
 import { AuthService } from 'src/auth/auth.service';
 
@@ -15,21 +15,21 @@ export class UsersService {
     private readonly authService: AuthService
   ){}
 
-  async getModerators(page: number = 1, limit: number = 10): Promise<ResponseData<any>> {
+  async getUsers(page: number = 1, limit: number = 10): Promise<ResponseData<any>> {
     try {
       const skip = (page - 1) * limit;
 
-      const moderators = await this.userModel.find({ role: "moderator" })
+      const users = await this.userModel.find({ role: "user" })
           .skip(skip)
           .limit(limit)
           .exec();
 
-      if (!moderators) throw new BadRequestException;
+      if (!users) throw new BadRequestException;
 
-      const total = await this.userModel.countDocuments({ role: "moderator" });
+      const total = await this.userModel.countDocuments({ role: "user" });
 
       return {
-          data: moderators,
+          data: users,
           page,
           limit,
           total,
@@ -40,36 +40,36 @@ export class UsersService {
     }
   }
 
-  async getModerator(userId: any): Promise<any> {
+  async getUser(userId: any): Promise<any> {
     try {
 
-      const moderator = await this.userModel.findById({
+      const user = await this.userModel.findById({
         _id: userId
       });
 
-      if(!moderator) throw new BadRequestException
+      if(!user) throw new BadRequestException
 
-      return moderator;
+      return user;
 
     } catch (error) {
       return error
     }
   }
 
-  async updateOneModerator(userModerator: UserDTO): Promise<any> {
+  async updateUser(userToUpdate: UserDTO): Promise<any> {
     try {
-      const moderator = await this.userModel.findById({
-        _id: userModerator.id
+      const user = await this.userModel.findById({
+        _id: userToUpdate.id
       });
 
-      if(!moderator) throw new BadRequestException
+      if(!user) throw new BadRequestException
 
-      const updateModerator = await this.userModel.updateOne({
-        _id: userModerator.id
-      }, userModerator);
+      const updateUser = await this.userModel.updateOne({
+        _id: userToUpdate.id
+      }, userToUpdate);
 
       return {
-        moderator: updateModerator,
+        user: updateUser,
       }
 
     } catch (error) {
@@ -77,21 +77,21 @@ export class UsersService {
     }
   }
 
-  async registerModerator(moderator: CreateModeratorDto) {
+  async registerUser(newUser: CreateUserDto) {
     try {
-      moderator.password = this.encryptUtil.hash(moderator.password)
-        const user = {
-            ...moderator,
-            role: RolesEnum.USER
-        }
+      newUser.password = this.encryptUtil.hash(newUser.password)
+      const user = {
+          ...newUser,
+          role: RolesEnum.USER
+      }
 
-        const saveUser = await this.userModel.create(user).catch(e =>{
-            throw new ConflictException()
-        })
-        const userPayload= await this.authService.generatePayload(saveUser)
-        return {
-          userPayload,
-        }
+      const saveUser = await this.userModel.create(user).catch(e =>{
+          throw new ConflictException()
+      })
+      const userPayload= await this.authService.generatePayload(saveUser)
+      return {
+        userPayload,
+      }
     } catch (error) {
         return error
     }

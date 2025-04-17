@@ -22,7 +22,7 @@ export interface IUserData {
   password: string;
 }
 
-export type CreateModeratorDto = Omit<IUserData, 'role'>
+export type CreateUserDto = Omit<IUserData, 'role'>
 
 export interface UserData {
     _id: string;

@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Headers, Param, Post, Put, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { IntCategorie, IntPagination, PaginationDto, _CreateCategorieDtoClass, _UpdateCategorieDtoClass } from './dto/categories.dto';
 import { CategorieService } from './categories.service';
-import { Response } from 'express';
 import { ApiBadRequestResponse, ApiBody, ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthRoles } from 'src/auth/auth.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';

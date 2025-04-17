@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Headers, Post, Query, Res, UseGuards } from '@nestjs/common';
 import { AuthDTO, SignDTO, SignUp, SingIn } from './dto/auth.dto';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiResponse, ApiOperation, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthGuard } from './auth.guard';
 
@@ -30,10 +29,8 @@ export class AuthController {
     @ApiUnauthorizedResponse({
         description: 'Invalid user or password',
     })
-    async signIn(@Body() singIn: SingIn, @Res() response:Response){
-        const res = await this.authService.signIn(singIn)
-        response.status(res.status || 200)
-        response.send(res)
+    async signIn(@Body() singIn: SingIn){
+        return await this.authService.signIn(singIn)
     }
     
     @Post('sign-up')
@@ -51,10 +48,8 @@ export class AuthController {
     @ApiBadRequestResponse({
         description: 'Invalid email',
     })
-    async signUp(@Body() signUp: SignUp, @Res() response:Response){
-        const res = await this.authService.signUp(signUp)
-        response.status(res.status || 201)
-        response.send(res)
+    async signUp(@Body() signUp: SignUp){
+        return await this.authService.signUp(signUp)
     }
 
     @Get('verify-token')
@@ -71,7 +66,7 @@ export class AuthController {
     })
     async verifyToken(@Query('userId') userId: string, @Headers('authorization') bearer: string){
         const [type, token] = bearer?.split(' ') ?? [];
-        const res = await this.authService.verifyToken(userId, token)
-        return res;
+        return await this.authService.verifyToken(userId, token)
+        
     }
 }

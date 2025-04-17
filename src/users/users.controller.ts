@@ -1,9 +1,8 @@
 import { Body, Controller, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { AuthRoles } from 'src/auth/auth.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { CreateModeratorDto, RolesEnum, UserDTO } from './dto/users.dto';
+import { CreateUserDto, RolesEnum, UserDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
-import { Response } from 'express';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 @Controller('users')
@@ -16,10 +15,10 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('moderators')
+    @Get('users')
     @ApiBearerAuth('authorization')
     @ApiResponse({
-        description: 'List Moderadors Success',
+        description: 'List users Success',
         status: 200,
         type: UserDTO,
     })
@@ -29,66 +28,58 @@ export class UsersController {
     @ApiUnauthorizedResponse({
         description: 'Invalid role',
     })
-    async getModerators(
+    async getUsers(
         @Query('page') page: number = 1,
         @Query('limit') limit: number = 10,
-        @Res() response:Response
     ){
-        const res = await this.userService.getModerators(page, limit)
-        response.send(res)
+        return await this.userService.getUsers(page, limit)
     }
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('moderators/:userId')
+    @Get('users/:userId')
     @ApiBearerAuth('authorization')
     @ApiResponse({
-        description: 'moderador info success',
+        description: 'user info success',
         status: 200,
         type: String,
     })
     @ApiUnauthorizedResponse({
         description: 'Invalid role',
     })
-    async getModerator(@Param('userId') userId: string, @Res() response:Response){
-        const res = await this.userService.getModerator(userId)
-        response.status(res.status || 200)
-        response.send(res)
+    async getUser(@Param('userId') userId: string){
+        return await this.userService.getUser(userId)
     }
     
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Put('moderators/:userId')
+    @Put('users/:userId')
     @ApiBearerAuth('authorization')
     @ApiResponse({
-        description: 'moderador info success',
+        description: 'user info updated success',
         status: 200,
         type: String,
     })
     @ApiUnauthorizedResponse({
         description: 'Invalid role',
     })
-    async updateInfoModerator(@Body() moderator: UserDTO, @Res() response:Response){
-        const res = await this.userService.updateOneModerator(moderator);
-        response.status(res.status || 200)
-        response.send(res)
+    async updateUser(@Body() user: UserDTO){
+        return await this.userService.updateUser(user);
     }
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Post('moderators')
+    @Post('users')
     @ApiBearerAuth('authorization')
     @ApiResponse({
-        description: 'moderador info success',
+        description: 'user info success',
         status: 200,
         type: String,
     })
     @ApiUnauthorizedResponse({
         description: 'Invalid role',
     })
-    async addModerator(@Body() moderator: CreateModeratorDto, @Res() response:Response){
-        const res = await this.userService.registerModerator(moderator);
-        response.status(res.status || 200)
-        response.send(res)
+    async addUser(@Body() user: CreateUserDto){
+        return await this.userService.registerUser(user);
     }
 }
