@@ -2,9 +2,10 @@ import { BadRequestException, ConflictException, HttpException, HttpStatus, Inje
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product, ProductDocument } from 'src/controllers/products/schemas/product.schema';
-import { _CreateProductDtoClass, _UpdateProductDtoClass, IntProduct } from './dto/product.dto';
+import { _CreateProductDtoClass, _FilterProductDtoClass, _UpdateProductDtoClass, IntProduct } from './dto/product.dto';
 import { Categorie, CategorieDocument } from 'src/controllers/categories/schemas/categories.schemas';
 import { CategorieService } from 'src/controllers/categories/categories.service';
+import { PaginationDto } from '../categories/dto/categories.dto';
 
 @Injectable()
 export class ProductService {
@@ -82,7 +83,7 @@ export class ProductService {
     }
   }
 
-  async getProductsList (): Promise<IntProduct[]> { 
+  async getProductsList (filter: _FilterProductDtoClass, paginate: PaginationDto): Promise<IntProduct[]> { 
     try {
       const products = await this.productModel.find().populate('categorieId').exec();
       return products

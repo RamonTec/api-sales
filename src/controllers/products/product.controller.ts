@@ -1,10 +1,11 @@
-import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { AuthRoles } from 'src/controllers/auth/auth.decorator';
 import { AuthGuard } from 'src/controllers/auth/auth.guard';
 import { _CreateProductDtoClass, _FilterProductDtoClass, _UpdateProductDtoClass } from './dto/product.dto';
 import { ProductService } from './product.service';
 import { ApiBadRequestResponse, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RolesEnum } from 'src/controllers/users/dto/users.dto';
+import { PaginationDto } from '../categories/dto/categories.dto';
 
 @Controller('product')
 @ApiTags('product flow')
@@ -57,8 +58,7 @@ export class ProductController {
   }
 
   @UseGuards(AuthGuard)
-  @AuthRoles(RolesEnum.ADMIN)
-  @Put(':_id')
+  @Get('')
   @ApiOperation({
       summary: 'update product'
   })
@@ -73,7 +73,7 @@ export class ProductController {
   @ApiBadRequestResponse({
       description: 'Invalid data',
   })
-  async listProducts(@Param('_id') _id: string){
-    return await this.productService.getProductsList();
+  async listProducts(@Param() filterProduct: _FilterProductDtoClass, @Query() paginationDto: PaginationDto){
+    return await this.productService.getProductsList(filterProduct, paginationDto);
   }
 }
