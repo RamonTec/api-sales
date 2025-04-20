@@ -55,8 +55,8 @@ export class CategoriesController {
     @ApiBadRequestResponse({
         description: 'Invalid data',
     })
-    async updateCategorie(@Body() oldCategorie: _UpdateCategorieDtoClass){
-        return await this.categorieService.updateCategorie(oldCategorie);
+    async updateCategorie(@Body() oldCategorie: _UpdateCategorieDtoClass, @Param('_id') _id: string){
+        return await this.categorieService.updateCategorie(oldCategorie, _id);
     }
 
     @UseGuards(AuthGuard)

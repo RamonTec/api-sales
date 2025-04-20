@@ -43,7 +43,7 @@ export class CategorieService {
     }
   }
 
-  async updateCategorie(categorie: _UpdateCategorieDtoClass): Promise<IntCategorie> {
+  async updateCategorie(categorie: _UpdateCategorieDtoClass, _id: string): Promise<IntCategorie> {
     try {
       const _categorie = await this.categorieModel.findById(categorie._id);
 
