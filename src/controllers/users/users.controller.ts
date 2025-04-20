@@ -15,7 +15,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('users')
+    @Get('')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'List users Success',
@@ -37,7 +37,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Get('users/:userId')
+    @Get(':userId')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'user info success',
@@ -53,7 +53,7 @@ export class UsersController {
     
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Put('users/:userId')
+    @Put(':userId')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'user info updated success',
@@ -69,7 +69,7 @@ export class UsersController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Post('users')
+    @Post('')
     @ApiBearerAuth('authorization')
     @ApiResponse({
         description: 'user info success',
