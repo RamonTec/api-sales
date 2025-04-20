@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/users/schemas/users.schemas';
-import { Categorie, CategorieSchema } from 'src/categories/schemas/categories.schemas';
-import { Product, ProductSchema } from 'src/products/schemas/product.schema';
+import { User, UserSchema } from 'src/controllers/users/schemas/users.schemas';
+import { Categorie, CategorieSchema } from 'src/controllers/categories/schemas/categories.schemas';
+import { Product, ProductSchema } from 'src/controllers/products/schemas/product.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({

@@ -2,9 +2,9 @@ import { Body, Controller, Get, Headers, Param, Post, Put, Query, Res, UploadedF
 import { IntCategorie, IntPagination, PaginationDto, _CreateCategorieDtoClass, _UpdateCategorieDtoClass } from './dto/categories.dto';
 import { CategorieService } from './categories.service';
 import { ApiBadRequestResponse, ApiBody, ApiResponse, ApiOperation, ApiTags, ApiConsumes } from '@nestjs/swagger';
-import { AuthRoles } from 'src/auth/auth.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { RolesEnum } from 'src/users/dto/users.dto';
+import { AuthRoles } from 'src/controllers/auth/auth.decorator';
+import { AuthGuard } from 'src/controllers/auth/auth.guard';
+import { RolesEnum } from 'src/controllers/users/dto/users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('categories')
@@ -40,7 +40,7 @@ export class CategoriesController {
 
     @UseGuards(AuthGuard)
     @AuthRoles(RolesEnum.ADMIN)
-    @Put('categories/:_id')
+    @Put(':_id')
     @ApiOperation({
         summary: 'Update categorie'
     })

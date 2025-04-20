@@ -1,10 +1,10 @@
 import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Product, ProductDocument } from 'src/products/schemas/product.schema';
+import { Product, ProductDocument } from 'src/controllers/products/schemas/product.schema';
 import { _CreateProductDtoClass, _UpdateProductDtoClass, IntProduct } from './dto/product.dto';
-import { Categorie, CategorieDocument } from 'src/categories/schemas/categories.schemas';
-import { CategorieService } from 'src/categories/categories.service';
+import { Categorie, CategorieDocument } from 'src/controllers/categories/schemas/categories.schemas';
+import { CategorieService } from 'src/controllers/categories/categories.service';
 
 @Injectable()
 export class ProductService {
@@ -29,7 +29,7 @@ export class ProductService {
     }
   }
 
-  async updateProduct(product: _UpdateProductDtoClass): Promise<IntProduct> {
+  async updateProduct(product: _UpdateProductDtoClass, id: string): Promise<IntProduct> {
     try {
 
       await this.validateProduct(product);
@@ -77,6 +77,15 @@ export class ProductService {
         description: 'This product already exists',
       })
       
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getProductsList (): Promise<IntProduct[]> { 
+    try {
+      const products = await this.productModel.find().populate('categorieId').exec();
+      return products
     } catch (error) {
       throw error;
     }

@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, HttpException, HttpStatus, Inje
 import { JsonWebTokenError, JwtService, TokenExpiredError } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDocument, User } from 'src/users/schemas/users.schemas';
+import { UserDocument, User } from 'src/controllers/users/schemas/users.schemas';
 import { AuthDTO, SignUp, SingIn } from './dto/auth.dto';
 import { Encrypt } from 'src/utils/encrypt.util';
 import { ConfigService } from 'src/config/config.service';

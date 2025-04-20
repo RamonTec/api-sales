@@ -1,10 +1,10 @@
-import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
-import { AuthRoles } from 'src/auth/auth.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { AuthRoles } from 'src/controllers/auth/auth.decorator';
+import { AuthGuard } from 'src/controllers/auth/auth.guard';
 import { _CreateProductDtoClass, _FilterProductDtoClass, _UpdateProductDtoClass } from './dto/product.dto';
 import { ProductService } from './product.service';
 import { ApiBadRequestResponse, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RolesEnum } from 'src/users/dto/users.dto';
+import { RolesEnum } from 'src/controllers/users/dto/users.dto';
 
 @Controller('product')
 @ApiTags('product flow')
@@ -16,7 +16,7 @@ export class ProductController {
 
   @UseGuards(AuthGuard)
   @AuthRoles(RolesEnum.ADMIN)
-  @Post('create')
+  @Post('')
   @ApiOperation({
       summary: 'Register new product'
   })
@@ -37,7 +37,7 @@ export class ProductController {
 
   @UseGuards(AuthGuard)
   @AuthRoles(RolesEnum.ADMIN)
-  @Put('update')
+  @Put(':_id')
   @ApiOperation({
       summary: 'update new product'
   })
@@ -52,14 +52,15 @@ export class ProductController {
   @ApiBadRequestResponse({
       description: 'Invalid data',
   })
-  async update(@Body() oldProduct: _UpdateProductDtoClass){
-    return await this.productService.updateProduct(oldProduct);
+  async update(@Body() oldProduct: _UpdateProductDtoClass, @Param('_id') _id: string){
+    return await this.productService.updateProduct(oldProduct, _id);
   }
 
   @UseGuards(AuthGuard)
-  @Put('products')
+  @AuthRoles(RolesEnum.ADMIN)
+  @Put(':_id')
   @ApiOperation({
-      summary: 'list products'
+      summary: 'update product'
   })
   @ApiBody({
       type: _FilterProductDtoClass
@@ -72,7 +73,7 @@ export class ProductController {
   @ApiBadRequestResponse({
       description: 'Invalid data',
   })
-  async listProducts(@Body() oldProduct: _UpdateProductDtoClass){
-    return await this.productService.updateProduct(oldProduct);
+  async listProducts(@Param('_id') _id: string){
+    return await this.productService.getProductsList();
   }
 }

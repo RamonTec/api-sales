@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
-import { AuthRoles } from 'src/auth/auth.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthRoles } from 'src/controllers/auth/auth.decorator';
+import { AuthGuard } from 'src/controllers/auth/auth.guard';
 import { CreateUserDto, RolesEnum, UserDTO } from './dto/users.dto';
 import { UsersService } from './users.service';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';

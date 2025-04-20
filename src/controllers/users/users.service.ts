@@ -5,7 +5,7 @@ import { User } from './schemas/users.schemas';
 import { UserDocument } from './schemas/users.schemas';
 import { CreateUserDto, ResponseData, RolesEnum, UserDTO } from './dto/users.dto';
 import { Encrypt } from 'src/utils/encrypt.util';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/controllers/auth/auth.service';
 
 @Injectable()
 export class UsersService {

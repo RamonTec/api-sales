@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CategorieDocument, Categorie } from 'src/categories/schemas/categories.schemas';
+import { CategorieDocument, Categorie } from 'src/controllers/categories/schemas/categories.schemas';
 import { _CreateCategorieDtoClass, _UpdateCategorieDtoClass, IntCategorie, IntPagination, PaginationDto } from './dto/categories.dto';
 import { FileUploadService } from 'src/utils/file-upload.util';
 

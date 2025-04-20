@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
-import { UserDTO } from "src/users/dto/users.dto";
+import { UserDTO } from "src/controllers/users/dto/users.dto";
 
 export class AuthDTO{
     user: Partial<UserDTO>;
